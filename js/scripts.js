@@ -8,10 +8,10 @@ let pokemonList =  [
   name:'Venusaur',
   height:6.07,
   type: ['Overgrow']
-}
+},
 {
 name:'Charizard',
 height:5.07,
 type: ['Blaze']
-},
-]
+}
+];
