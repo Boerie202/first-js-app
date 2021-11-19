@@ -17,4 +17,13 @@ var pokemonList = [
   type:"Blaze"
 }
 ]
-console.log (pokemonList[0].name)
+var text ="";
+//A for loop to display the names of pokemon on the web page
+for (let i=0; i < pokemonList.length; i++){
+  if (pokemonList[i].height > 6 ){
+    document.write (pokemonList[i].name + "   " + "height:  " + "("+ pokemonList[i].height + ")" + " -That's a massive Pokemon!" + "<br>");
+  }
+  else {
+      document.write (pokemonList[i].name + "   " + "height:  " + "("+ pokemonList[i].height + ")" + "<br>")
+  }
+}
