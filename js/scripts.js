@@ -1,5 +1,6 @@
+//Start of IIFE
+let pokemonRepository = (function() {
 //My array of pokemons, showing different data
-let pokemonRepository = (function(){
 let pokemonList = [
 {
   name:"Blastoise",
@@ -16,19 +17,26 @@ let pokemonList = [
   height:5.07,
   type:"Blaze"
 },
-]
+];
 
 //returns the pokemonList array
-function getAll (){
+function getAll() {
 return pokemonList;
 }
 
 //adds new data to the pokemonList array
-function add() {
+function add(pokemon) {
     pokemonList.push(pokemon);
-}
-)();
+    }
 
-pokemonList.forEach(function(pokemon){
+ return {
+ add: add,
+ getAll: getAll
+ };
+
+})();
+
+//display all pokemon info on the document
+pokemonRepository.getAll().forEach(function(pokemon){
 document.write(pokemon.name + "<br>");
 });
