@@ -29,14 +29,39 @@ function add(pokemon) {
     pokemonList.push(pokemon);
     }
 
+
+
+function addListItem(pokemon){
+  let pokemonList = document.querySelector(".pokemon-list");
+  let pokemonItem = document.createElement("li");
+  let button = document.createElement("button");
+  button.innerText = pokemon.name;
+  button.classList.add ("button-class");
+  pokemonItem.appendChild(button);
+  pokemonList.appendChild(pokemonItem);
+//Events start
+button.addEventListener('click', function(){
+showDetails(pokemon);
+})
+//Events finish
+}//<-------------addListItem function finish
+
+
+
+function showDetails(pokemon){
+  console.log(pokemon.name);
+}
+
  return {
  add: add,
- getAll: getAll
+ getAll: getAll,
+ addListItem: addListItem,
+ showDetails: showDetails
  };
 
 })();
 
 //display all pokemon info on the document
 pokemonRepository.getAll().forEach(function(pokemon){
-document.write(pokemon.name + "<br>");
+  pokemonRepository.addListItem(pokemon);
 });
