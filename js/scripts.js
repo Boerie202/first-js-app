@@ -34,7 +34,7 @@ function loadList() {
 }
 
 
-//Load pokemon details
+//Load pokemon details on page
   function loadDetails(item) {
     let url = item.detailsUrl;
     return fetch(url).then(function (response) {
