@@ -97,7 +97,7 @@ function showDetails(pokemon){
     weightElement.innerText = 'Weight: ' + pokemon.weight + ' kg';
 
     let imageElement = document.createElement('img')
-    imageElement.src = pokemon.imgUrl
+    imageElement.src = pokemon.imageUrl;
 
 
     modal.appendChild(closeButtonElement);
