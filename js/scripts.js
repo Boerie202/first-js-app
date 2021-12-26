@@ -1,123 +1,127 @@
 //-----------------------------------Start of IIFE for Pokemon Details------------------
-let pokemonRepository = (function() {
-let apiUrl = 'https://pokeapi.co/api/v2/pokemon/?limit=150';
-let pokemonList = [];
-let modal = document.querySelector('#pokedex');
-let imageContainer = document.querySelector('#image-container');
+let pokemonRepository = (function () {
+  let apiUrl = "https://pokeapi.co/api/v2/pokemon/?limit=150";
+  let pokemonList = [];
+  let modal = document.querySelector("#pokedex");
+  let imageContainer = document.querySelector("#image-container");
 
+  function getAll() {
+    //returns the pokemonList array
+    return pokemonList;
+  }
 
-function getAll() { //returns the pokemonList array
-return pokemonList;
-}
-
-function add(pokemon) { //adds new data to the pokemonList array
+  function add(pokemon) {
+    //adds new data to the pokemonList array
     pokemonList.push(pokemon);
-    }
+  }
 
-//---------------------------------------------------------------------------------
+  //---------------------------------------------------------------------------------
 
-function loadList() { //Loads full list of 150 pokemon and displays them on the page
-    return fetch(apiUrl).then(function (response) {
-      return response.json();
-        }).then(function (json) {
-          json.results.forEach(function (item) {
-            let pokemon = {
-              name: item.name,
-              detailsUrl: item.url
-            };
-            add(pokemon);
-          });
-        }).catch(function (e) {
-          console.error(e);
-    })
-}
+  function loadList() {
+    //Loads full list of 150 pokemon and displays them on the page
+    return fetch(apiUrl)
+      .then(function (response) {
+        return response.json();
+      })
+      .then(function (json) {
+        json.results.forEach(function (item) {
+          let pokemon = {
+            name: item.name,
+            detailsUrl: item.url,
+          };
+          add(pokemon);
+        });
+      })
+      .catch(function (e) {
+        console.error(e);
+      });
+  }
 
+  //---------------------------------------------------------------------------------
 
-//---------------------------------------------------------------------------------
-
-  function loadDetails(item) { //Load pokemon details on page
+  function loadDetails(item) {
+    //Load pokemon details on page
     let url = item.detailsUrl;
-    return fetch(url).then(function (response) {
-      return response.json();
-    }).then(function (details) { // Add details to the item
-      item.imageUrl = details.sprites.front_default;
-      item.height = details.height;
-      item.weight = details.weight;
-    }).catch(function (e) {
-      console.error(e);
+    return fetch(url)
+      .then(function (response) {
+        return response.json();
+      })
+      .then(function (details) {
+        // Add details to the item
+        item.imageUrl = details.sprites.front_default;
+        item.height = details.height;
+        item.weight = details.weight;
+      })
+      .catch(function (e) {
+        console.error(e);
+      });
+  }
+
+  function addListItem(pokemon) {
+    let pokemonList = document.querySelector(".pokemon-list");
+    let pokemonItem = document.createElement("li");
+    let button = document.createElement("button");
+    button.innerText = pokemon.name;
+    button.classList.add("button-class");
+    pokemonItem.appendChild(button);
+    pokemonList.appendChild(pokemonItem);
+
+    button.addEventListener("click", function () {
+      // Listen for click and show details of pokemon
+      showDetails(pokemon);
     });
   }
 
+  function showDetails(pokemon) {
+    pokemonRepository.loadDetails(pokemon).then(function () {
+      showModal(pokemon);
+    });
+  }
 
-function addListItem(pokemon){
-  let pokemonList = document.querySelector(".pokemon-list");
-  let pokemonItem = document.createElement("li");
-  let button = document.createElement("button");
-  button.innerText = pokemon.name;
-  button.classList.add ("button-class");
-  pokemonItem.appendChild(button);
-  pokemonList.appendChild(pokemonItem);
+  //------------------------------Bootstrap Modal Section start-----------------------
 
+  function showModal(pokemon) {
+    let modalBody = $(".modal-body");
+    let modalTitle = $(".modal-title");
+    modalTitle.empty();
+    modalBody.empty();
 
-button.addEventListener('click', function(){// Listen for click and show details of pokemon
-showDetails(pokemon);
-})
-}
+    let nameElement = $(
+      '<h5 class="text-capitalise">' + pokemon.name + "</h5>"
+    );
+    let heightElement = $(
+      "<p>" + "Height: " + pokemon.height + "0 cm" + "</p>"
+    );
+    let weightElement = $("<p>" + "Weight: " + pokemon.weight + " kg" + "<p>");
+    let imageElement = $('<img src"">');
+    imageElement.attr("src", pokemon.imageUrl);
 
+    modalTitle.append(nameElement);
+    modalBody.append(imageElement);
+    modalBody.append(weightElement);
+    modalBody.append(heightElement);
 
-function showDetails(pokemon){
-  pokemonRepository.loadDetails(pokemon).then(function(){
-    showModal (pokemon);
-  });
-}
+    $("#pokedex").modal();
+  }
 
+  //------------------------------Bootstrap Modal section end--------------------------
 
-//------------------------------Bootstrap Modal Section start-----------------------
-
-function showModal(pokemon) {
-
-
-  let modalBody = $('.modal-body');
-  let modalTitle = $('.modal-title');
-  modalTitle.empty();
-  modalBody.empty();
-
-  let nameElement = $('<h5 class="text-capitalise">' + pokemon.name + '</h5>');
-  let heightElement = $('<p>' + "Height: " + pokemon.height + "0 cm" + '</p>');
-  let weightElement = $('<p>' + "Weight: " + pokemon.weight + " kg" + '<p>');
-  let imageElement = $('<img src"">');
-  imageElement.attr('src',pokemon.imageUrl);
-
-  modalTitle.append(nameElement);
-  modalBody.append(imageElement);
-  modalBody.append(weightElement);
-  modalBody.append(heightElement);
-
-$('#pokedex').modal();
-}
-
-
-//------------------------------Bootstrap Modal section end--------------------------
-
-
-
- return {
- add: add,
- getAll: getAll,
- addListItem: addListItem,
- showDetails: showDetails,
- loadList: loadList,
- loadDetails: loadDetails
- };
-
+  return {
+    add: add,
+    getAll: getAll,
+    addListItem: addListItem,
+    showDetails: showDetails,
+    loadList: loadList,
+    loadDetails: loadDetails,
+  };
 })();
 
 //----------------------------display all pokemon info on the document---------------------------------
 
-pokemonRepository.loadList().then(function(){
-pokemonRepository.getAll().forEach(function(pokemon){
-pokemonRepository.addListItem(pokemon);
-});
+pokemonRepository.loadList().then(function () {
+  pokemonRepository.getAll().forEach(function (pokemon) {
+    pokemonRepository.addListItem(pokemon);
+  });
 });
 
 //--------------------------------Email & password form validation IIFE Start---------Saved for later---------------------
